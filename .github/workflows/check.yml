@@ -1,0 +1,15 @@
+# Proves the quick-run path works: build the image, then run every script inside it.
+name: check
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  run-all:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t blog-examples .
+      - run: docker run --rm -v "$PWD/charts:/examples/charts" blog-examples all
+      - run: ls -R charts | head -50
