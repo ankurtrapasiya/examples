@@ -54,8 +54,8 @@ eq = np.full((1, N), 1 / N)
 r_eq, v_eq, s_eq = stats(eq)
 print(f"equal weights: return {r_eq[0]:.2%}  sd {v_eq[0]:.2%}  Sharpe {s_eq[0]:.3f}")
 
-# sensitivity: nudge one expected return by one percentage point
-for t, delta in [("MS", 0.02), ("NVDA", -0.05)]:
+# sensitivity: nudge one expected return by five percentage points
+for t, delta in [("GLD", -0.05)]:
     mu2 = mu.copy()
     mu2[names.index(t)] += delta
     _, _, shp2 = stats(W, mu2)
