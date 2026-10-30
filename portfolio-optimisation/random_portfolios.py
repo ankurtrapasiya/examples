@@ -65,7 +65,7 @@ for t, delta in [("GLD", -0.05)]:
 
 # --- chart -------------------------------------------------------------------------------------
 cs.apply()
-fig, ax = plt.subplots(figsize=(8, 4.4))
+fig, ax = plt.subplots(figsize=(8, 5.2))
 grey_to_maroon = LinearSegmentedColormap.from_list("g2m", [cs.GREY, cs.MAROON_LIGHT, cs.MAROON])
 ax.scatter(vol * 100, ret * 100, c=shp, cmap=grey_to_maroon, s=2, vmin=shp.min(), vmax=shp.max(), rasterized=True)   # 50,000 dots: a bitmap inside the SVG, not 50,000 paths
 ax.scatter(sd * 100, mu * 100, color=cs.INK, s=25, zorder=3)
@@ -73,11 +73,12 @@ for i, n in enumerate(names):
     ax.annotate(n, (sd[i] * 100, mu[i] * 100), xytext=(5, -3), textcoords="offset points", fontsize=8)
 ax.scatter([vol[best] * 100], [ret[best] * 100], color=cs.INK, edgecolors="white", s=70, zorder=4, label="best Sharpe found")
 ax.scatter([vol[low] * 100], [ret[low] * 100], color=cs.BLUE, s=60, zorder=4, label="lowest risk found")
-xs = np.linspace(0, 36, 2)
+x_max, y_max = sd.max() * 100 + 4, mu.max() * 100 + 5     # axes hold every ticker and every mix; nothing is clipped
+xs = np.linspace(0, x_max, 2)
 ax.plot(xs, rf * 100 + shp[best] * xs, color=cs.MAROON, lw=0.9, ls="--", label="capital market line (cash + best mix)")
 ax.scatter([0], [rf * 100], color=cs.MAROON, s=15)
-ax.set_xlim(0, 36)
-ax.set_ylim(5, 40)
+ax.set_xlim(0, x_max)
+ax.set_ylim(0, y_max)
 ax.set_xlabel("Risk: standard deviation of yearly return (% a year)")
 ax.set_ylabel("Expected return (% a year)")
 cs.title(ax, "50,000 random mixes of five tickers, 2020–2025 (redder = higher Sharpe ratio)")
