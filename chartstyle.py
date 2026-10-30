@@ -136,12 +136,12 @@ def _embed_points(fig, path, limit=2500):
         panels.append({"x0": round(float(x0), 2), "x1": round(float(x1), 2), "y0": round(float(H - y1), 2), "y1": round(float(H - y0), 2),
                        "title": ax.get_title() or "", "xlabel": ax.get_xlabel() or "x", "ylabel": ax.get_ylabel() or "y",
                        "xlog": ax.get_xscale() == "log"})
-        arts = [(a.get_label(), a.get_xydata(), to_hex(a.get_color())) for a in ax.get_lines()]
+        arts = [(a.get_label(), a.get_xydata(), to_hex(a.get_color()), "line") for a in ax.get_lines()]
         for c in ax.collections:
             if hasattr(c, "get_offsets") and len(c.get_offsets()):
                 fc = c.get_facecolor()
-                arts.append((c.get_label(), np.asarray(c.get_offsets()), to_hex(fc[0]) if len(fc) else "#888888"))
-        for label, xy, color in arts:
+                arts.append((c.get_label(), np.asarray(c.get_offsets()), to_hex(fc[0]) if len(fc) else "#888888", "scatter"))
+        for label, xy, color, kind in arts:
             if not label or label.startswith("_") or len(xy) == 0 or len(xy) > limit:
                 continue
             xy = np.asarray(xy, dtype=float)
@@ -157,7 +157,7 @@ def _embed_points(fig, path, limit=2500):
             else:
                 xs = [float(f"{v:.6g}") for v in xy[:, 0]]
             series.append({
-                "panel": k, "label": label, "color": css_colour(color),
+                "panel": k, "label": label, "color": css_colour(color), "kind": kind,
                 "x": xs, "y": [float(f"{v:.6g}") for v in xy[:, 1]],
                 "sx": [round(float(v), 2) for v in disp[:, 0]], "sy": [round(float(H - v), 2) for v in disp[:, 1]],
             })
