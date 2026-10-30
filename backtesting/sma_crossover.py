@@ -11,7 +11,7 @@ sell when it crosses back below. Three experiments:
   1. the strategy by hand in pandas (vectorised), with and without a one-day lag, to show
      look-ahead bias;
   2. the same strategy in backtesting.py (event-driven), with a commission;
-  3. a parameter sweep in vectorbt on 2019-2021, best pair applied to 2022-2023, to show
+  3. a parameter sweep in vectorbt on 2020-2023, best pair applied to 2024-2025, to show
      over-fitting.
 """
 import sys
@@ -98,8 +98,8 @@ trades = stats["_trades"]
 print(f"  commission paid {(trades['Size'].abs() * (trades['EntryPrice'] + trades['ExitPrice']) * FEE).sum():.0f} on 10,000")
 
 
-# --- 3. vectorbt: sweep on 2019-2021, test on 2022-2023 ------------------------------
-train, test = spy[:"2021"], spy["2022":]
+# --- 3. vectorbt: sweep on 2020-2023, test on 2024-2025 ------------------------------
+train, test = spy[:"2023"], spy["2024":]
 windows = np.arange(5, 255, 5)
 
 
@@ -114,16 +114,16 @@ def sweep(px):
 tr, oos_all = sweep(train), sweep(test)
 best = tr.idxmax()
 bh_train, bh_test = train.iloc[-1] / train.iloc[0] - 1, test.iloc[-1] / test.iloc[0] - 1
-print(f"\nvectorbt sweep: {len(tr)} pairs on 2019-2021; best fast={best[0]}, slow={best[1]} "
+print(f"\nvectorbt sweep: {len(tr)} pairs on 2020-2023; best fast={best[0]}, slow={best[1]} "
       f"return {tr.max():+.1%}; median {tr.median():+.1%}; worst {tr.min():+.1%}; buy and hold {bh_train:+.1%}")
 print(f"pairs beating buy and hold in-sample: {(tr > bh_train).sum()} of {len(tr)}")
 top = tr.sort_values(ascending=False).head(5)
-print("\ntop 5 in-sample pairs, then the same pair on 2022-2023:")
+print("\ntop 5 in-sample pairs, then the same pair on 2024-2025:")
 for k, r in top.items():
-    print(f"  fast {k[0]:3d} slow {k[1]:3d}   2019-21 {r:+7.1%}   2022-23 {oos_all[k]:+7.1%}")
-print(f"  {'buy and hold':20s}   2019-21 {bh_train:+7.1%}   2022-23 {bh_test:+7.1%}")
-print(f"  {'fast 20 slow 100':20s}   2019-21 {tr[(FAST, SLOW)]:+7.1%}   2022-23 {oos_all[(FAST, SLOW)]:+7.1%}")
-print(f"all {len(tr)} pairs on 2022-23: median {oos_all.median():+.1%}, best {oos_all.max():+.1%}, worst {oos_all.min():+.1%}; "
+    print(f"  fast {k[0]:3d} slow {k[1]:3d}   2020-23 {r:+7.1%}   2024-25 {oos_all[k]:+7.1%}")
+print(f"  {'buy and hold':20s}   2020-23 {bh_train:+7.1%}   2024-25 {bh_test:+7.1%}")
+print(f"  {'fast 20 slow 100':20s}   2020-23 {tr[(FAST, SLOW)]:+7.1%}   2024-25 {oos_all[(FAST, SLOW)]:+7.1%}")
+print(f"all {len(tr)} pairs on 2024-25: median {oos_all.median():+.1%}, best {oos_all.max():+.1%}, worst {oos_all.min():+.1%}; "
       f"beating buy and hold {(oos_all > bh_test).sum()} of {len(tr)}; "
       f"rank correlation in-sample vs out-of-sample {tr.corr(oos_all, method='spearman'):.2f}")
 print(f"top 10% in-sample pairs: median out-of-sample {oos_all[tr >= tr.quantile(0.9)].median():+.1%}; "
@@ -150,7 +150,7 @@ eq_cheat = (1 + in_market * ret).cumprod() * 10_000
 a2.plot(eq_cheat.index, eq_cheat, color=cs.AMBER, lw=1.2, ls="--", label="crossover with look-ahead (cheating)")
 a2.plot(eq_bt.index, eq_bt, color=cs.MAROON, lw=1.4, label="crossover, next-day fills, 0.1% commission")
 a2.plot(eq_bh.index, eq_bh, color=cs.BLUE, lw=1.4, label="buy and hold")
-cs.title(a2, "What 10,000 dollars became under each rule, 2019-2023", 2)
+cs.title(a2, "What 10,000 dollars became under each rule, 2020-2025", 2)
 a2.set_ylabel("Portfolio value (dollars)")
 a2.set_xlabel("Date")
 a2.legend()
@@ -158,10 +158,10 @@ a2.legend()
 a3.scatter(tr.values * 100, oos_all.values * 100, s=22, color=cs.GREY, alpha=0.8, label="one fast/slow pair", rasterized=True)
 a3.scatter([tr[best] * 100], [oos_all[best] * 100], s=70, color=cs.MAROON, zorder=3, label=f"best in-sample pair (fast {best[0]}, slow {best[1]})")
 a3.scatter([tr[(FAST, SLOW)] * 100], [oos_all[(FAST, SLOW)] * 100], s=70, color=cs.PURPLE, zorder=3, label=f"the pair the post uses (fast {FAST}, slow {SLOW})")
-a3.axhline(100 * bh_test, color=cs.BLUE, lw=1, ls="--", label="buy and hold, 2022-2023")
+a3.axhline(100 * bh_test, color=cs.BLUE, lw=1, ls="--", label="buy and hold, 2024-2025")
 cs.title(a3, f"{len(tr):,} parameter pairs: return where they were chosen vs. return afterwards", 3)
-a3.set_xlabel("Return on 2019-2021, the years the pair was chosen on (%)")
-a3.set_ylabel("Return on 2022-2023, unseen years (%)")
+a3.set_xlabel("Return on 2020-2023, the years the pair was chosen on (%)")
+a3.set_ylabel("Return on 2024-2025, unseen years (%)")
 a3.legend()
 
 cs.save(fig, OUT / "sma-crossover.svg")

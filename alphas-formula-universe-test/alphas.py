@@ -25,7 +25,7 @@ import market_data as md  # noqa: E402
 
 OUT = cs.out_dir("alphas-formula-universe-test")
 HORIZONS = [1, 2, 3, 5, 10, 20]
-SHOW_DAY = "2022-06-17"
+SHOW_DAY = "2024-01-10"
 
 
 def p(label, value):
@@ -97,7 +97,7 @@ def ic_crosssection(sig, h, years=None):
 
 
 print()
-print("Information coefficient: rank correlation of the signal with the next-h-day return, 2019-2023")
+print("Information coefficient: rank correlation of the signal with the next-h-day return, 2020-2025")
 rows = []
 for h in HORIZONS:
     rows.append({"horizon (days)": h, "Alpha#9 (per ticker)": ic_timeseries(a9, h),
@@ -108,14 +108,14 @@ print(ic.round(3).to_string())
 print()
 print("The same, 1-day horizon, year by year")
 yr_rows = []
-for y in range(2019, 2024):
+for y in range(2020, 2026):
     yr_rows.append({"year": y, "Alpha#9": ic_timeseries(a9, 1, [y]), "Alpha#10": ic_crosssection(a10, 1, [y])})
 yr = pd.DataFrame(yr_rows).set_index("year")
 print(yr.round(3).to_string())
 
 print()
-p("Alpha#9 at 1 day, 2019-2021 (first three years)", f"{ic_timeseries(a9, 1, [2019, 2020, 2021]):.3f}")
-p("Alpha#9 at 1 day, 2022-2023 (held-out two years)", f"{ic_timeseries(a9, 1, [2022, 2023]):.3f}")
+p("Alpha#9 at 1 day, 2020-2023 (first four years)", f"{ic_timeseries(a9, 1, [2020, 2021, 2022, 2023]):.3f}")
+p("Alpha#9 at 1 day, 2024-2025 (held-out two years)", f"{ic_timeseries(a9, 1, [2024, 2025]):.3f}")
 p("Days in the sample per ticker", len(a9))
 
 # --- overlap ----------------------------------------------------------------------------------

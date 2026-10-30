@@ -6,7 +6,7 @@
 
 Autocorrelation of prices, returns and absolute returns; a shuffle test for what "no
 autocorrelation" looks like; volatility clustering; a trailing against a centred moving average.
-All on SPY, 2019-2023, from the blog's shared prices.
+All on SPY, 2020-2025, from the blog's shared prices.
 Run:  uv run examples/time-series-returns-not-prices/time_series.py
 """
 import sys
@@ -57,7 +57,8 @@ big = r.abs() >= r.abs().quantile(0.95)
 by_month = big.groupby(r.index.to_period("M")).sum().sort_values(ascending=False)
 p("days in the top 5% of |return|", int(big.sum()))
 p("of those, in the three busiest months", f"{int(by_month.iloc[:3].sum())}  ({', '.join(str(m) for m in by_month.index[:3])})")
-p("months out of 60 with none of them", int((by_month == 0).sum()) + (60 - len(by_month)))
+n_months = r.index.to_period("M").nunique()
+p(f"months out of {n_months} with none of them", n_months - int((by_month > 0).sum()))
 nxt = r.abs().shift(-1)
 p("mean |return| next day: after a top-5% day / after any other day",
   f"{nxt[big].mean():.2%} / {nxt[~big].mean():.2%}")

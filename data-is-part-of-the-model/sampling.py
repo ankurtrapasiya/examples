@@ -35,13 +35,13 @@ def p(label, value):
 
 df = md.features().reset_index().sort_values("date")
 X = df[md.FEATURES].to_numpy(); y = (df["next_vol"] * md.ANNUALISE).to_numpy()
-is_train = (df["date"] < "2022-01-01").to_numpy()
+is_train = (df["date"] < "2024-01-01").to_numpy()
 Xtr, ytr, Xte, yte = X[is_train], y[is_train], X[~is_train], y[~is_train]
 
 print("\n== the split is part of the model ==")
 rf = lambda: RandomForestRegressor(300, min_samples_leaf=5, random_state=0, n_jobs=-1)
 m = rf().fit(Xtr, ytr)
-p("random forest, time split (fit 2019-21, score 2022-23): test RMSE", f"{rmse(yte, m.predict(Xte)):.2f}")
+p("random forest, time split (fit 2020-23, score 2024-25): test RMSE", f"{rmse(yte, m.predict(Xte)):.2f}")
 kf = cross_val_score(rf(), X, y, cv=KFold(5, shuffle=True, random_state=0), scoring="neg_root_mean_squared_error")
 p("same model, 5-fold shuffled cross-validation RMSE (leaks)", f"{-kf.mean():.2f} (folds {' '.join(f'{-v:.2f}' for v in kf)})")
 ts = cross_val_score(rf(), X, y, cv=TimeSeriesSplit(5), scoring="neg_root_mean_squared_error")
@@ -86,8 +86,8 @@ p("residuals 1, 1, 10: absolute total and the outlier's share", f"{res.sum()} an
 cs.apply()
 fig, (a1, a2, a3) = plt.subplots(3, 1, figsize=(8, 3.8 * 3))
 
-cs.title(a1, "Three ways to score the same model: only the forward folds meet the crash year", 1)
-names = ["time split\n(fit 2019-21,\nscore 2022-23)", "5 shuffled folds\n(leaks)", "5 forward folds", "baseline:\npredict the mean"]
+cs.title(a1, "Three ways to score the same model: the shuffled folds are the only ones tested on the crash year", 1)
+names = ["time split\n(fit 2020-23,\nscore 2024-25)", "5 shuffled folds\n(leaks)", "5 forward folds", "baseline:\npredict the mean"]
 vals = [rmse(yte, rf().fit(Xtr, ytr).predict(Xte)), -kf.mean(), -ts.mean(), rmse(yte, np.full_like(yte, ytr.mean()))]
 a1.bar(names, vals, color=[cs.MAROON, cs.BLUE, cs.MAROON, cs.GREY], width=0.55, label="_x")
 for i, v in enumerate(vals):

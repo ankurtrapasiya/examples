@@ -60,8 +60,8 @@ p("inside the bands", f"{100 * ((ok >= 0) & (ok <= 1)).mean():.1f}%")
 # --- the width through 2020 -------------------------------------------------------------------
 w20 = width["2020"]
 print()
-p("narrowest band width in 2019-2023", f"{100 * width.min():.1f}% on {width.idxmin().date()}")
-p("widest band width in 2019-2023", f"{100 * width.max():.1f}% on {width.idxmax().date()}")
+p("narrowest band width in 2020-2025", f"{100 * width.min():.1f}% on {width.idxmin().date()}")
+p("widest band width in 2020-2025", f"{100 * width.max():.1f}% on {width.idxmax().date()}")
 p("band width on 2020-02-19 (the high before the crash)", f"{100 * width['2020-02-19']:.1f}%")
 p("band width on 2020-03-16", f"{100 * width['2020-03-16']:.1f}%")
 p("band width on 2020-08-31", f"{100 * width['2020-08-31']:.1f}%")

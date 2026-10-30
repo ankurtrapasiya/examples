@@ -31,7 +31,7 @@ tr, te = md.split(df)
 F = md.FEATURES
 X_tr, X_te = tr[F].to_numpy(), te[F].to_numpy()
 vol_tr, vol_te = tr["next_vol"].to_numpy() * md.ANNUALISE, te["next_vol"].to_numpy() * md.ANNUALISE
-print(f"{len(df):,} ticker-days; train {len(tr):,} (2019-2021), test {len(te):,} (2022-2023)")
+print(f"{len(df):,} ticker-days; train {len(tr):,} (2020-2023), test {len(te):,} (2024-2025)")
 
 # --- classification: will next month be a stress month? ---------------------------------
 y_tr, y_te = (vol_tr > STRESS).astype(int), (vol_te > STRESS).astype(int)

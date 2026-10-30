@@ -23,7 +23,7 @@ import market_data as md  # noqa: E402
 
 OUT = cs.out_dir("portfolio-construction-real-constraints")
 T = md.TICKERS
-r = md.daily_returns(md.prices())                      # daily returns, 2019-2023
+r = md.daily_returns(md.prices())                      # daily returns, 2020-2025
 mu = r.mean() * md.TRADING_DAYS                        # yearly average return
 sd = r.std() * np.sqrt(md.TRADING_DAYS)                # yearly standard deviation
 cov = r.cov() * md.TRADING_DAYS                        # yearly covariance matrix
@@ -38,7 +38,7 @@ def row(w):
     return "  ".join(f"{t} {100 * x:+5.1f}%" for t, x in zip(T, w))
 
 
-print("Inputs, 2019-2023, yearly")
+print("Inputs, 2020-2025, yearly")
 for t in T:
     p(f"  {t}: average return, standard deviation", f"{100 * mu[t]:5.1f}%  {100 * sd[t]:5.1f}%")
 print("Correlation matrix")
@@ -59,9 +59,9 @@ w_risk = w_risk * (w_lin.abs().sum() / w_risk.abs().sum())    # same gross as th
 for name, w in (("linear, 4 x forecast", w_lin), ("sign, 10% each way", w_sign), ("risk-adjusted, forecast / variance", w_risk)):
     p(f"  {name}", row(w))
     p("     gross, net", f"{100 * w.abs().sum():.0f}%  {100 * w.sum():+.0f}%")
-p("  AAPL / SPY weight ratio, linear rule", f"{w_lin['AAPL'] / w_lin['SPY']:.2f}")
-p("  AAPL / SPY weight ratio, risk-adjusted rule", f"{w_risk['AAPL'] / w_risk['SPY']:.2f}")
-p("  variance ratio AAPL / SPY", f"{sd['AAPL']**2 / sd['SPY']**2:.2f}")
+p("  NVDA / SPY weight ratio, linear rule", f"{w_lin['NVDA'] / w_lin['SPY']:.2f}")
+p("  NVDA / SPY weight ratio, risk-adjusted rule", f"{w_risk['NVDA'] / w_risk['SPY']:.2f}")
+p("  variance ratio NVDA / SPY", f"{sd['NVDA']**2 / sd['SPY']**2:.2f}")
 
 # --- 2. a long-only portfolio against its benchmark ---------------------------------------------
 print("\n2. A hand-chosen long-only portfolio against SPY")
@@ -98,13 +98,13 @@ p("  five assets equal weight: std, average of their stds", f"{100 * np.sqrt(w5 
 # --- 4. the inputs are estimates ------------------------------------------------------------------
 print("\n4. Nudging one forecast, and shrinking all of them")
 f2 = f.copy()
-f2["JPM"] = 0.02                                                # JPM forecast 1% -> 2%
-p("  linear weights, JPM forecast 1%", row(c * f))
-p("  linear weights, JPM forecast 2%", row(c * f2))
+f2["MS"] = 0.02                                                # MS forecast 1% -> 2%
+p("  linear weights, MS forecast 1%", row(c * f))
+p("  linear weights, MS forecast 2%", row(c * f2))
 f3 = f.copy()
-f3["AAPL"], f3["SPY"] = 0.045, 0.025
-p("  risk-adjusted AAPL/SPY ratio, forecasts 5% and 2%", f"{(f['AAPL'] / sd['AAPL']**2) / (f['SPY'] / sd['SPY']**2):.2f}")
-p("  risk-adjusted AAPL/SPY ratio, forecasts 4.5% and 2.5%", f"{(f3['AAPL'] / sd['AAPL']**2) / (f3['SPY'] / sd['SPY']**2):.2f}")
+f3["NVDA"], f3["SPY"] = 0.045, 0.025
+p("  risk-adjusted NVDA/SPY ratio, forecasts 5% and 2%", f"{(f['NVDA'] / sd['NVDA']**2) / (f['SPY'] / sd['SPY']**2):.2f}")
+p("  risk-adjusted NVDA/SPY ratio, forecasts 4.5% and 2.5%", f"{(f3['NVDA'] / sd['NVDA']**2) / (f3['SPY'] / sd['SPY']**2):.2f}")
 fs = 0.5 * f                                                    # shrink every forecast halfway towards "no view" (zero)
 p("  forecasts shrunk halfway towards zero", row(fs))
 p("  linear weights from the shrunk forecasts, gross", f"{row(c * fs)}   {100 * (c * fs).abs().sum():.0f}%")

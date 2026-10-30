@@ -41,7 +41,7 @@ STRESS = 30.0
 df = md.features().reset_index()                       # columns: date, ticker, features, targets
 df["stress"] = (df["next_vol"] * md.ANNUALISE > STRESS).astype(int)
 df = df.sort_values(["date", "ticker"]).reset_index(drop=True)   # time order, for the splits
-train, test = df[df["date"] < "2022-01-01"], df[df["date"] >= "2022-01-01"]
+train, test = df[df["date"] < "2024-01-01"], df[df["date"] >= "2024-01-01"]
 X_tr, y_tr = train[md.FEATURES + ["ticker"]], train["stress"]
 X_te, y_te = test[md.FEATURES + ["ticker"]], test["stress"]
 print(f"rows: train {len(train)}, test {len(test)}; stress months: train {y_tr.mean():.1%}, test {y_te.mean():.1%}")
@@ -67,7 +67,7 @@ models = {
     "gradient boosting (HistGradientBoosting)": Pipeline([("prep", prep()), ("model", HistGradientBoostingClassifier(
         max_depth=3, learning_rate=0.05, max_iter=200, random_state=0))]),
 }
-print("\n1. same interface, four models (fit on 2019-2021, scored on 2022-2023):")
+print("\n1. same interface, four models (fit on 2020-2023, scored on 2024-2025):")
 fitted = {}
 for name, m in models.items():
     m.fit(X_tr, y_tr)
@@ -86,13 +86,13 @@ print(confusion_matrix(y_te, lr_bal.predict(X_te)))
 print(f"   AUC unchanged? plain {auc(lr):.3f}, balanced {auc(lr_bal):.3f}")
 
 # --- 3. cross-validation: shuffled folds lie on time series ----------------------------
-print("\n3. cross-validated AUC of the gradient boosting pipeline on 2019-2021 only:")
+print("\n3. cross-validated AUC of the gradient boosting pipeline on 2020-2023 only:")
 gb = models["gradient boosting (HistGradientBoosting)"]
 kf = cross_val_score(gb, X_tr, y_tr, cv=KFold(5, shuffle=True, random_state=0), scoring="roc_auc")
 ts = cross_val_score(gb, X_tr, y_tr, cv=TimeSeriesSplit(5), scoring="roc_auc")
 print(f"  KFold, shuffled:  folds {np.round(kf, 3)}  mean {kf.mean():.3f}")
 print(f"  TimeSeriesSplit:  folds {np.round(ts, 3)}  mean {ts.mean():.3f}")
-print(f"  actual 2022-2023 test AUC: {auc(fitted['gradient boosting (HistGradientBoosting)']):.3f}")
+print(f"  actual 2024-2025 test AUC: {auc(fitted['gradient boosting (HistGradientBoosting)']):.3f}")
 
 # --- 4. GridSearchCV with the right splitter ----------------------------------------
 print("\n4. grid search over the boosting settings, TimeSeriesSplit(5), scored by AUC:")
@@ -140,8 +140,8 @@ fig, (a1, a2, a3) = plt.subplots(3, 1, figsize=(8, 3.8 * 3))
 folds = np.arange(1, 6)
 a1.plot(folds, kf, "o-", color=cs.AMBER, label="KFold, shuffled (future rows leak into training)")
 a1.plot(folds, ts, "o-", color=cs.MAROON, label="TimeSeriesSplit (train on the past, validate on what follows)")
-a1.axhline(auc(fitted["gradient boosting (HistGradientBoosting)"]), color=cs.BLUE, ls="--", lw=1, label="the real test, 2022-2023")
-cs.title(a1, "Cross-validated AUC on 2019-2021, shuffled folds vs time-ordered folds", 1)
+a1.axhline(auc(fitted["gradient boosting (HistGradientBoosting)"]), color=cs.BLUE, ls="--", lw=1, label="the real test, 2024-2025")
+cs.title(a1, "Cross-validated AUC on 2020-2023, shuffled folds vs time-ordered folds", 1)
 a1.set_xlabel("Validation fold (1 to 5)")
 a1.set_ylabel("AUC on the validation fold (0.5 = coin flip)")
 a1.set_xticks(folds)
@@ -162,7 +162,7 @@ for (name, m), col in zip(fitted.items(), [cs.GREY, cs.PURPLE, cs.BLUE, cs.MAROO
     fpr, tpr, _ = roc_curve(y_te, m.predict_proba(X_te)[:, 1])
     a3.plot(fpr * 100, tpr * 100, color=col, lw=1.4, label=f"{name.split(' (')[0]} (AUC {auc(m):.3f})")
 a3.plot([0, 100], [0, 100], color=cs.GREY, ls=":", lw=1, label="_coin flip")
-cs.title(a3, "ROC curves on the 2022-2023 test months", 3)
+cs.title(a3, "ROC curves on the 2024-2025 test months", 3)
 a3.set_xlabel("Calm months wrongly flagged as stress (% of calm months)")
 a3.set_ylabel("Stress months caught (% of stress months)")
 a3.legend()

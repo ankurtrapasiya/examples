@@ -61,7 +61,7 @@ p("first 100-day value exists on", px.index[99].date())
 
 # --- noise: how often a crossover flips, for different fast windows ---------------------------
 print()
-print("Crossover flips, 2019 to 2023 (fast average crosses the 100-day average)")
+print("Crossover flips, 2020 to 2025 (fast average crosses the 100-day average)")
 flips = {}
 for fast in (5, 10, 20, 50):
     side = np.sign(px.rolling(fast).mean() - sma100).dropna()
@@ -71,7 +71,7 @@ for fast in (5, 10, 20, 50):
 # --- redundancy: three indicators from the same 20 days -------------------------------------
 ind = pd.DataFrame({"sma_ratio": px / sma20 - 1, "bollinger": boll, "momentum_20d": mom20}).dropna()
 print()
-print("Correlation between the three 20-day indicators, 2019 to 2023")
+print("Correlation between the three 20-day indicators, 2020 to 2025")
 print(ind.corr().round(2).to_string())
 
 # --- chart ----------------------------------------------------------------------------------

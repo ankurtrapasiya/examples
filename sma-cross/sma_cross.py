@@ -4,7 +4,7 @@
 # ///
 """Numbers and chart for the post "The SMA cross: two averages, and the day they swap places".
 
-The 50-day and 200-day simple moving averages of SPY's close, every day they crossed from 2019 to
+The 50-day and 200-day simple moving averages of SPY's close, every day they crossed from 2020 to
 2023, how far the price had already moved by the time each cross arrived, and how many crosses
 Murphy's faster pairs (5/20, 10/50) produce on the same data. Concept only: no trading rule is run.
 Run:  uv run examples/sma-cross/sma_cross.py
@@ -48,7 +48,7 @@ p(f"  the day before ({prev.date()}): 50-day, 200-day", f"{sma50[prev]:.2f}, {sm
 
 # --- every 50/200 cross, and what the price had done by then ------------------------------------
 print()
-print("Every 50/200 cross on SPY, 2019 to 2023")
+print("Every 50/200 cross on SPY, 2020 to 2025")
 print(f"  {'date':<12}{'kind':<8}{'close':>9}{'from recent extreme':>22}{'since':>13}")
 for d, s in x.items():
     kind = "golden" if s > 0 else "death"
@@ -59,7 +59,7 @@ for d, s in x.items():
 
 # --- faster pairs flip more --------------------------------------------------------------------
 print()
-print("Number of crosses, 2019 to 2023, by pair of windows")
+print("Number of crosses, 2020 to 2025, by pair of windows")
 for f, s in ((5, 20), (10, 50), (50, 200)):
     n = len(crosses(px.rolling(f).mean(), px.rolling(s).mean()))
     p(f"  {f}-day over {s}-day", f"{n} crosses")
@@ -74,18 +74,18 @@ for d, s in x.items():
     ax1.axvline(d, color=cs.GREEN if s > 0 else cs.AMBER, lw=0.8, ls="--")
 ax1.set_xlabel("Date")
 ax1.set_ylabel("Price (dollars)")
-cs.title(ax1, "Golden crosses (green) and death crosses (amber), 2019 to 2023", 1)
+cs.title(ax1, "Golden crosses (green) and death crosses (amber), 2020 to 2025", 1)
 ax1.legend()
 
-win = slice("2020-01-01", "2020-08-31")
+win = slice("2025-01-01", "2025-09-30")
 ax2.plot(px[win].index, px[win], color=cs.MAROON, label="SPY close")
 ax2.plot(sma50[win].index, sma50[win], color=cs.BLUE, label="50-day average")
 ax2.plot(sma200[win].index, sma200[win], color=cs.GREY, label="200-day average")
 for d, s in x[win].items():
     ax2.axvline(d, color=cs.GREEN if s > 0 else cs.AMBER, lw=0.8, ls="--")
-ax2.set_xlabel("Date (2020)")
+ax2.set_xlabel("Date (2025)")
 ax2.set_ylabel("Price (dollars)")
-cs.title(ax2, "2020 up close: the death cross after the fall, the golden cross after the recovery", 2)
+cs.title(ax2, "2025 up close: the death cross after the fall, the golden cross after the recovery", 2)
 ax2.legend()
 
 cs.save(fig, OUT / "sma_cross.svg")

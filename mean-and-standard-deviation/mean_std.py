@@ -18,7 +18,7 @@ import market_data as md  # noqa: E402
 
 OUT = cs.out_dir("mean-and-standard-deviation")
 
-# --- 1. prices to daily returns: SPY, first trading days of 2019 ---------------------
+# --- 1. prices to daily returns: SPY, first trading days of 2020 ---------------------
 spy = md.prices(["SPY"])["SPY"]
 first = spy.iloc[:6]
 print("SPY closes:", [f"{v:.2f}" for v in first])
@@ -38,7 +38,7 @@ print("numpy std ddof=1:", rr.std(ddof=1).round(2), " numpy default ddof=0:", rr
 
 # --- 2b. five years of real data: average daily return and daily risk, annualised -------
 rets = md.daily_returns(md.prices())
-print("\n2019-2023, per ticker:")
+print("\n2020-2025, per ticker:")
 for t in rets:
     x = rets[t]
     print(f"  {t:4s} daily mean {x.mean():.4%}  daily sd {x.std(ddof=1):.3%}  "

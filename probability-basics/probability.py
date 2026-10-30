@@ -4,7 +4,7 @@
 # ///
 """Numbers and chart for the post "Probability basics".
 
-Counts come from SPY's daily closes, 2019-2023 (examples/data/prices.csv); the Bayes
+Counts come from SPY's daily closes, 2020-2025 (examples/data/prices.csv); the Bayes
 example uses stated assumptions. Run:  uv run examples/probability-basics/probability.py
 """
 import sys

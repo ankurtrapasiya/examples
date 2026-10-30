@@ -28,7 +28,7 @@ def p(label, value):
 
 px = md.prices()
 r = md.daily_returns(px)
-tr, te = r.loc[:"2021"], r.loc["2022":]
+tr, te = r.loc[:"2023"], r.loc["2024":]
 
 print("\n== data snooping: 1,000 signals that know nothing ==")
 rng = np.random.default_rng(1)
@@ -39,7 +39,7 @@ pnl_tr, pnl_te = sig_tr * tr["SPY"].to_numpy(), sig_te * te["SPY"].to_numpy()
 sh_tr = K * pnl_tr.mean(1) / pnl_tr.std(1, ddof=1)
 sh_te = K * pnl_te.mean(1) / pnl_te.std(1, ddof=1)
 t_tr = pnl_tr.mean(1) / pnl_tr.std(1, ddof=1) * np.sqrt(len(tr))
-p("signals with t > 2 on 2019-2021 (expected by luck: ~2.3%)", f"{(t_tr > 2).sum()}")
+p("signals with t > 2 on 2020-2023 (expected by luck: ~2.3%)", f"{(t_tr > 2).sum()}")
 p("their mean Sharpe in-sample / out-of-sample", f"{sh_tr[t_tr > 2].mean():.2f} / {sh_te[t_tr > 2].mean():+.2f}")
 best = sh_tr.argmax()
 p("the best of 1,000: Sharpe in-sample / out-of-sample", f"{sh_tr[best]:.2f} / {sh_te[best]:+.2f}")
@@ -88,10 +88,10 @@ fig, (a1, a2, a3) = plt.subplots(3, 1, figsize=(8, 3.8 * 3))
 
 cs.title(a1, "1,000 coin-flip signals: Sharpe where they were chosen against Sharpe afterwards", 1)
 a1.scatter(sh_tr, sh_te, s=6, color=cs.GREY, alpha=0.5, rasterized=True, label="one random signal")
-a1.scatter(sh_tr[t_tr > 2], sh_te[t_tr > 2], s=14, color=cs.MAROON, label='the ones that looked "significant" on 2019 to 2021')
+a1.scatter(sh_tr[t_tr > 2], sh_te[t_tr > 2], s=14, color=cs.MAROON, label='the ones that looked "significant" on 2020 to 2023')
 a1.axhline(0, color=cs.GREY, lw=0.8); a1.axvline(0, color=cs.GREY, lw=0.8)
-a1.set_xlabel("Sharpe on 2019 to 2021 (where the signal was picked)")
-a1.set_ylabel("Sharpe on 2022 to 2023 (unseen)")
+a1.set_xlabel("Sharpe on 2020 to 2023 (where the signal was picked)")
+a1.set_ylabel("Sharpe on 2024 to 2025 (unseen)")
 a1.legend()
 
 cs.title(a2, "Survivorship by construction: 200 made-up stocks, the index formed at the end", 2)
@@ -107,7 +107,7 @@ a2.legend()
 
 cs.title(a3, "A volatility flag built with the full-sample mean fires before it could have", 3)
 a3.plot(vol.index, md.ANNUALISE * vol, color=cs.GREY, lw=1, label="SPY 20-day volatility (% a year)")
-a3.plot(vol.index, md.ANNUALISE * vol.where(z_full > 1), color=cs.MAROON, lw=1.4, label="flagged using the full five years' mean (leaks)")
+a3.plot(vol.index, md.ANNUALISE * vol.where(z_full > 1), color=cs.MAROON, lw=1.4, label="flagged using the full 2020 to 2025 mean (leaks)")
 a3.plot(vol.index, md.ANNUALISE * vol.where(z_roll > 1), color=cs.BLUE, lw=1.4, ls=":", label="flagged using only data known so far")
 a3.set_xlabel("Date")
 a3.set_ylabel("Volatility (% a year)")

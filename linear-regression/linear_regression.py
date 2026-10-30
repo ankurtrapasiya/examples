@@ -58,8 +58,8 @@ A = md.ANNUALISE
 x1_tr, x1_te = tr[["vol_20d"]].to_numpy() * A, te[["vol_20d"]].to_numpy() * A
 y_tr, y_te = tr["next_vol"].to_numpy() * A, te["next_vol"].to_numpy() * A
 one = LinearRegression().fit(x1_tr, y_tr)
-print(f"\none input, {len(y_tr):,} training rows (2019-2021): next vol = {one.intercept_:.2f} + {one.coef_[0]:.3f} x this month's vol")
-print(f"  training R^2 {r2_score(y_tr, one.predict(x1_tr)):.3f}; test R^2 (2022-2023, {len(y_te):,} rows) {r2_score(y_te, one.predict(x1_te)):.3f}")
+print(f"\none input, {len(y_tr):,} training rows (2020-2023): next vol = {one.intercept_:.2f} + {one.coef_[0]:.3f} x this month's vol")
+print(f"  training R^2 {r2_score(y_tr, one.predict(x1_tr)):.3f}; test R^2 (2024-2025, {len(y_te):,} rows) {r2_score(y_te, one.predict(x1_te)):.3f}")
 cols = ["vol_20d", "ret_20d"]
 x2_tr = np.column_stack([tr["vol_20d"] * A, tr["ret_20d"] * 100])
 x2_te = np.column_stack([te["vol_20d"] * A, te["ret_20d"] * 100])
@@ -92,5 +92,5 @@ for ret, ls in [(0.0, "--"), (-10.0, "-")]:
 ax.legend(fontsize=9, loc="upper left")
 ax.set_xlabel("This month's volatility (% a year)")
 ax.set_ylabel("Next month's volatility (% a year)")
-cs.title(ax, "SPY, 2019–2021, one dot per day (darker = the month fell more)", 2)
+cs.title(ax, "SPY, 2020–2023, one dot per day (darker = the month fell more)", 2)
 cs.save(fig, OUT / "linear-regression.svg")

@@ -5,7 +5,7 @@
 """Numbers and chart for the post "Why prices are hard to beat".
 
 Random-walk checks on SPY (autocorrelation, up-after-up, streak lengths against a shuffled
-series), a pair-trade z-score on JPM against XOM, and a doubling-rule simulation on an American
+series), a pair-trade z-score on MS against OXY, and a doubling-rule simulation on an American
 roulette wheel with a bankroll sweep.  Run:  uv run examples/why-prices-are-hard-to-beat/efficiency.py
 """
 import sys
@@ -56,8 +56,8 @@ pos_fade = (~up).astype(float).shift(1).fillna(0)
 p("hold after an up day, no costs: total / buy and hold", f"{np.prod(1 + pos_follow * spy) - 1:+.1%} / {np.prod(1 + spy) - 1:+.1%}")
 p("hold after a down day, no costs: total", f"{np.prod(1 + pos_fade * spy) - 1:+.1%}")
 
-print("\n== a pair: JPM against XOM ==")
-ratio = np.log(px["JPM"] / px["XOM"])
+print("\n== a pair: MS against OXY ==")
+ratio = np.log(px["MS"] / px["OXY"])
 z = (ratio - ratio.rolling(60).mean()) / ratio.rolling(60).std()
 p("log price ratio, 60-day z-score: min / max", f"{z.min():.1f} / {z.max():.1f}")
 p("days beyond |z| > 2", f"{(z.abs() > 2).sum()} of {z.notna().sum()}")
@@ -69,8 +69,8 @@ for d in sig.index:
     if i + 20 < len(z):
         back.append(abs(z.iloc[i + 20]) < abs(z.iloc[i]))
 p("after |z| > 2, share of cases closer to the mean 20 days later", f"{np.mean(back):.0%} of {len(back)}")
-corr60 = r["JPM"].rolling(60).corr(r["XOM"])
-p("rolling 60-day correlation JPM-XOM: min / max", f"{corr60.min():.2f} / {corr60.max():.2f}")
+corr60 = r["MS"].rolling(60).corr(r["OXY"])
+p("rolling 60-day correlation MS-OXY: min / max", f"{corr60.min():.2f} / {corr60.max():.2f}")
 
 print("\n== the doubling rule on American roulette ==")
 P_WIN, TARGET, SPINS = 18 / 38, 40, 2000
@@ -120,8 +120,8 @@ a1.set_xlabel("Yesterday's return (%)")
 a1.set_ylabel("Today's return (%)")
 a1.legend()
 
-cs.title(a2, "A pair's z-score: how far JPM has drifted from XOM, in 60-day standard deviations", 2)
-a2.plot(z.index, z, color=cs.MAROON, lw=1, label="z-score of the JPM/XOM price ratio")
+cs.title(a2, "A pair's z-score: how far MS has drifted from OXY, in 60-day standard deviations", 2)
+a2.plot(z.index, z, color=cs.MAROON, lw=1, label="z-score of the MS/OXY price ratio")
 for lvl, lab in [(2, "plus or minus 2: the usual entry signal"), (-2, "_")]:
     a2.axhline(lvl, color=cs.BLUE, lw=1, ls="--", label=lab)
 a2.axhline(0, color=cs.GREY, lw=0.8)

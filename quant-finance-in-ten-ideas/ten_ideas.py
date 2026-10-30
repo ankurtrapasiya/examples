@@ -5,7 +5,7 @@
 """Numbers and charts for the post "Quantitative finance in ten ideas".
 
 A doubling-rule betting simulation on a European roulette wheel, and a Sharpe-maximising optimiser
-(SciPy SLSQP) run on the blog's shared prices (SPY, AAPL, JPM, XOM, GLD, 2019-2023).
+(SciPy SLSQP) run on the blog's shared prices (SPY, NVDA, MS, OXY, GLD, 2020-2025).
 Run:  uv run examples/quant-finance-in-ten-ideas/ten_ideas.py
 """
 import sys
@@ -98,7 +98,7 @@ def perf(prices, w):
 
 
 print("\n== optimiser: chosen on one period, run on the next ==")
-windows = [("2019", "2020"), ("2020", "2021"), ("2021", "2022"), ("2022", "2023"), ("2019-2021", "2022-2023")]
+windows = [("2020", "2021"), ("2021", "2022"), ("2022", "2023"), ("2023", "2024"), ("2024", "2025"), ("2020-2023", "2024-2025")]
 rows = []
 for a, b in windows:
     pa = px.loc[a.split("-")[0]:a.split("-")[-1]]
@@ -114,8 +114,8 @@ for a, b in windows:
     p(f"   return on {b}: optimised / equal weights", f"{r_out:+.1%} / {r_eq:+.1%}")
 
 print("\n== diversification: four-asset mix vs its members ==")
-for yr in ["2020", "2021"]:
-    sub = r.loc[yr, ["SPY", "AAPL", "JPM", "XOM"]]
+for yr in ["2020", "2022"]:
+    sub = r.loc[yr, ["SPY", "NVDA", "MS", "OXY"]]
     mix = sub.mean(axis=1)
     p(f"{yr}: daily sigma of each", " ".join(f"{t}:{sub[t].std():.2%}" for t in sub))
     p(f"{yr}: equal-weight mix sigma, average pairwise correlation", f"{mix.std():.2%}, {sub.corr().values[np.triu_indices(4, 1)].mean():.2f}")
@@ -140,12 +140,12 @@ a2.set_xlabel("Bankroll (dollars, log scale)"); a2.set_ylabel("Percent of plays,
 cs.save(fig, OUT / "doubling-rule.svg")
 
 fig, ax = plt.subplots(1, 1, figsize=(8, 3.8))
-cs.title(ax, "Weights chosen on 2019 to 2021, then run on 2022 to 2023, against equal weights")
+cs.title(ax, "Weights chosen on 2020 to 2023, then run on 2024 to 2025, against equal weights")
 a, b, w, *_ = rows[-1]
-pb = px.loc["2022":"2023"]
+pb = px.loc["2024":"2025"]
 norm = (pb / pb.iloc[0]).to_numpy()
-ax.plot(pb.index, norm @ w, color=cs.MAROON, label="Sharpe-maximising weights from 2019 to 2021")
+ax.plot(pb.index, norm @ w, color=cs.MAROON, label="Sharpe-maximising weights from 2020 to 2023")
 ax.plot(pb.index, norm @ np.full(5, 0.2), color=cs.BLUE, label="equal weights, 20% each")
 ax.plot(pb.index, (pb["SPY"] / pb["SPY"].iloc[0]).to_numpy(), color=cs.GREY, label="SPY")
-ax.set_xlabel("Date"); ax.set_ylabel("Value of 1 dollar invested at the start of 2022"); ax.legend()
+ax.set_xlabel("Date"); ax.set_ylabel("Value of 1 dollar invested at the start of 2024"); ax.legend()
 cs.save(fig, OUT / "optimised-vs-equal.svg")

@@ -5,7 +5,7 @@
 """Numbers and chart for the post "Returns compound".
 
 Growth factors, CAGR, arithmetic against geometric mean, volatility drag and recovery, on the
-blog's shared prices (SPY, AAPL, JPM, XOM, GLD, 2019-2023).
+blog's shared prices (SPY, NVDA, MS, OXY, GLD, 2020-2025).
 Run:  uv run examples/returns-compound/returns.py
 """
 import sys
@@ -40,7 +40,7 @@ for t in md.TICKERS:
 
 print("\n== arithmetic vs geometric, yearly ==")
 yearly = px.resample("YE").last().pct_change().dropna()
-yearly.loc[pd.Timestamp("2019-12-31")] = px.loc["2019"].iloc[-1] / px.iloc[0] - 1
+yearly.loc[pd.Timestamp("2020-12-31")] = px.loc["2020"].iloc[-1] / px.iloc[0] - 1
 yearly = yearly.sort_index()
 for t in md.TICKERS:
     a = yearly[t].mean()
@@ -60,7 +60,7 @@ for loss in [0.10, 0.20, 0.30, 0.337, 0.50, 0.80]:
     p(f"lose {loss:.1%}: gain needed to get back", f"{1 / (1 - loss) - 1:.1%}")
 wealth = (1 + r["SPY"]).cumprod()
 dd = wealth / wealth.cummax() - 1
-p("SPY max drawdown 2019-2023 / recovery needed", f"{dd.min():.1%} / {1 / (1 + dd.min()) - 1:.1%}")
+p("SPY max drawdown 2020-2025 / recovery needed", f"{dd.min():.1%} / {1 / (1 + dd.min()) - 1:.1%}")
 
 print("\n== rule of 72 ==")
 for rate in [0.03, 0.06, 0.09, 0.12]:
@@ -79,7 +79,7 @@ a1.set_xlabel("Time")
 a1.set_ylabel("Value of 100 dollars")
 a1.legend()
 
-cs.title(a2, "SPY, 2019 to 2023: adding daily returns against multiplying growth factors", 2)
+cs.title(a2, "SPY, 2020 to 2025: adding daily returns against multiplying growth factors", 2)
 a2.plot(r.index, 100 * ((1 + r["SPY"]).cumprod() - 1), color=cs.MAROON, label="multiply growth factors (the real account)")
 a2.plot(r.index, 100 * r["SPY"].cumsum(), color=cs.BLUE, label="add daily returns (wrong)")
 a2.set_xlabel("Date")
@@ -90,7 +90,7 @@ cs.title(a3, "The gain needed to recover a loss grows faster than the loss", 3)
 losses = np.linspace(0, 0.9, 91)
 a3.plot(100 * losses, 100 * (1 / (1 - losses) - 1), color=cs.MAROON, label="gain needed to get back to even")
 a3.plot(100 * losses, 100 * losses, color=cs.GREY, lw=1, ls="--", label="the loss itself, for comparison")
-a3.scatter([33.7], [100 * (1 / (1 - 0.337) - 1)], color=cs.BLUE, zorder=3, label="SPY's worst fall of these five years, 33.7%")
+a3.scatter([33.7], [100 * (1 / (1 - 0.337) - 1)], color=cs.BLUE, zorder=3, label="SPY's worst fall of 2020 to 2025, 33.7%")
 a3.set_xlabel("Loss (%)")
 a3.set_ylabel("Gain needed to recover (%)")
 a3.set_ylim(0, 400)

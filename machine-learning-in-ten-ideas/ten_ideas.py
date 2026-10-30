@@ -4,8 +4,8 @@
 # ///
 """Numbers and chart for the post "Machine learning for quantitative finance in ten ideas".
 
-Everything runs on the blog's shared market data (examples/market_data.py: SPY, AAPL, JPM, XOM,
-GLD, 2019-2023, seven price-derived features, target = next month's volatility) with scikit-learn,
+Everything runs on the blog's shared market data (examples/market_data.py: SPY, NVDA, MS, OXY,
+GLD, 2020-2025, seven price-derived features, target = next month's volatility) with scikit-learn,
 plus two tiny made-up datasets that favour a line or a tree.
 Run:  uv run examples/machine-learning-in-ten-ideas/ten_ideas.py
 """
@@ -35,7 +35,7 @@ def p(label, value):
 
 
 df = md.features()
-train, test = md.split(df)                     # 2019-2021 train, 2022-2023 test, in time order
+train, test = md.split(df)                     # 2020-2023 train, 2024-2025 test, in time order
 Xtr, ytr = train[md.FEATURES].to_numpy(), (train["next_vol"] * md.ANNUALISE).to_numpy()
 Xte, yte = test[md.FEATURES].to_numpy(), (test["next_vol"] * md.ANNUALISE).to_numpy()
 print("\n== data ==")

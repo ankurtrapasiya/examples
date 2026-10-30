@@ -57,7 +57,7 @@ for side, sign in [("buy", 1), ("sell", -1)]:
     p(f"{side} 1,000 at 100 with $10 commission and 0.5% impact: price / cash", f"{px_:.2f} / {-sign * 1000 * px_ - COMM:+,.2f}")
 p("round trip at an unchanged price: cost", f"{2 * 1000 * 100 * IMPACT + 2 * COMM:,.0f} = {(2 * 1000 * 100 * IMPACT + 2 * COMM) / (1000 * 100):.2%}")
 
-print("\n== costs on two rules, SPY 2019-2023 ==")
+print("\n== costs on two rules, SPY 2020-2025 ==")
 px = md.prices()["SPY"]
 r = md.daily_returns(md.prices())["SPY"]
 fast, slow = px.rolling(20).mean(), px.rolling(100).mean()
@@ -66,7 +66,7 @@ pos_fast = (px > px.shift(1)).astype(float).shift(1).fillna(0).reindex(r.index).
 results = {}
 for name, pos in [("20/100 crossover", pos_slow), ("yesterday-up rule", pos_fast)]:
     trades = pos.diff().abs().fillna(0)
-    p(f"{name}: position changes in 5 years", f"{int(trades.sum())}")
+    p(f"{name}: position changes, 2020 to 2025", f"{int(trades.sum())}")
     for c in [0.0, 0.001, 0.005, 0.01]:
         strat = pos * r - trades * c
         tot = np.prod(1 + strat) - 1

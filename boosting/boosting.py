@@ -60,9 +60,9 @@ for t in range(3):
 
 # --- 3. gradient boosting, with the number of trees chosen on a validation split ----------
 # The best round is picked on validation data (early stopping), never on the test set.
-# On a time series the validation months come AFTER the fitting months: 2019-2020 fit, 2021 validate.
+# On a time series the validation months come AFTER the fitting months: 2020-2022 fit, 2023 validate.
 dates = tr_all.index.get_level_values("date")
-fit_mask = dates < "2021-01-01"
+fit_mask = dates < "2023-01-01"
 X_fit, X_val, y_fit, y_val = X_tr[fit_mask], X_tr[~fit_mask], y_tr[fit_mask], y_tr[~fit_mask]
 rf = RandomForestClassifier(n_estimators=300, max_features=3, min_samples_leaf=20, random_state=0, n_jobs=-1).fit(X_tr, y_tr)
 rf_auc = roc_auc_score(y_te, rf.predict_proba(X_te)[:, 1])
@@ -72,7 +72,7 @@ models = {
     "gradient boosting, depth-3 trees, rate 1.0": GradientBoostingClassifier(n_estimators=300, learning_rate=1.0, max_depth=3, random_state=0),
 }
 curves, chosen = {}, {}
-print(f"\ntrained on {len(y_fit):,} rows (2019-2020), round chosen on {len(y_val):,} validation rows (2021), scored on {len(y_te):,} test rows (2022-2023)")
+print(f"\ntrained on {len(y_fit):,} rows (2020-2022), round chosen on {len(y_val):,} validation rows (2023), scored on {len(y_te):,} test rows (2024-2025)")
 for name, model in models.items():
     model.fit(X_fit, y_fit)
     val = [roc_auc_score(y_val, p[:, 1]) for p in model.staged_predict_proba(X_val)]

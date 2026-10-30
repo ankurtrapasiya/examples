@@ -75,8 +75,8 @@ p("lasso: features left non-zero at alpha 0.01 / 0.1 / 1", f"{(np.abs(lasso_path
 print("\n== a rolling z-score in a crash ==")
 px = md.prices()["SPY"]
 z = (px - px.rolling(60).mean()) / px.rolling(60).std()
-p("SPY on 2020-03-23 (the low): price / 60-day mean / 60-day sd / z", f"{px.loc['2020-03-23']:.0f} / {px.rolling(60).mean().loc['2020-03-23']:.0f} / {px.rolling(60).std().loc['2020-03-23']:.1f} / {z.loc['2020-03-23']:.2f}")
-p("SPY on 2020-02-28 (a week into the fall): price / mean / sd / z", f"{px.loc['2020-02-28']:.0f} / {px.rolling(60).mean().loc['2020-02-28']:.0f} / {px.rolling(60).std().loc['2020-02-28']:.1f} / {z.loc['2020-02-28']:.2f}")
+p("SPY on 2025-04-08 (the low): price / 60-day mean / 60-day sd / z", f"{px.loc['2025-04-08']:.0f} / {px.rolling(60).mean().loc['2025-04-08']:.0f} / {px.rolling(60).std().loc['2025-04-08']:.1f} / {z.loc['2025-04-08']:.2f}")
+p("SPY on 2025-02-27 (a week into the fall): price / mean / sd / z", f"{px.loc['2025-02-27']:.0f} / {px.rolling(60).mean().loc['2025-02-27']:.0f} / {px.rolling(60).std().loc['2025-02-27']:.1f} / {z.loc['2025-02-27']:.2f}")
 p("worked: window mean 100, sd 2, price 106 -> z; same gap with sd 10 -> z", f"{(106 - 100) / 2:.1f}; {(106 - 100) / 10:.1f}")
 
 # ------------------------------------------------------------------ chart ----
@@ -92,7 +92,6 @@ vals = [rmse(y_te, LinearRegression().fit(tr[md.FEATURES], y_tr).predict(te[md.F
 a1.bar(names, vals, color=[cs.GREY, cs.MAROON, cs.BLUE, cs.GREY], width=0.55)
 for i, v in enumerate(vals):
     a1.text(i, v + 0.05, f"{v:.2f}", ha="center", fontsize=9)
-a1.set_ylim(6, 8)
 a1.set_xlabel("Feature set")
 a1.set_ylabel("Test RMSE (volatility points)")
 
@@ -108,7 +107,7 @@ a2.set_ylabel("Standardised coefficient")
 a2.legend()
 
 cs.title(a3, "A rolling z-score hides a crash: the window's spread balloons with the fall", 3)
-a3.plot(z.loc["2019-10":"2020-06"].index, z.loc["2019-10":"2020-06"], color=cs.MAROON, label="SPY price z-score, 60-day window")
+a3.plot(z.loc["2025-01":"2025-09"].index, z.loc["2025-01":"2025-09"], color=cs.MAROON, label="SPY price z-score, 60-day window")
 a3.axhline(-2, color=cs.BLUE, lw=1, ls="--", label="z = −2")
 a3.axhline(0, color=cs.GREY, lw=0.8)
 a3.set_xlabel("Date")

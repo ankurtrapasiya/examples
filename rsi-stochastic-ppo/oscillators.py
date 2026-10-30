@@ -89,7 +89,7 @@ p("  MACD the same day, in dollars", f"{ema12[HAND_DAY] - ema26[HAND_DAY]:+.2f}"
 
 # --- how often each sits past its line -----------------------------------------------------------
 print()
-print("Share of days past the extreme lines, 2019 to 2023")
+print("Share of days past the extreme lines, 2020 to 2025")
 p("  RSI above 70 / below 30", f"{100 * (r > 70).mean():.1f}% / {100 * (r < 30).mean():.1f}%")
 p("  %K above 80 / below 20", f"{100 * (k > 80).mean():.1f}% / {100 * (k < 20).mean():.1f}%")
 p("  PPO above 0 / below 0", f"{100 * (ppo > 0).mean():.1f}% / {100 * (ppo < 0).mean():.1f}%")
@@ -110,7 +110,7 @@ p("  RSI, %K, PPO", f"{r[CALM]:.1f}, {k[CALM]:.1f}, {ppo[CALM]:+.2f}%")
 
 # --- agreement --------------------------------------------------------------------------------
 print()
-print("Correlation between the three, 2019 to 2023")
+print("Correlation between the three, 2020 to 2025")
 print(pd.DataFrame({"rsi": r, "stoch_k": k, "ppo": ppo}).dropna().corr().round(2).to_string())
 
 # --- chart ----------------------------------------------------------------------------------

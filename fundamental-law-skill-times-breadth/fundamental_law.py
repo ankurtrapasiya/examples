@@ -54,7 +54,7 @@ for ic, br in ((0.05, 100), (0.05, 400), (0.10, 25), (0.15, 10), (0.03, 1000)):
 p("  double the breadth, IR multiplied by sqrt(2)", f"{np.sqrt(2):.3f}")
 p("  quadruple the breadth, IR multiplied by sqrt(4)", f"{np.sqrt(4):.3f}")
 
-print("\n3. The five tickers, 2019 to 2023: correlation of daily returns")
+print("\n3. The five tickers, 2020 to 2025: correlation of daily returns")
 r = md.daily_returns(md.prices())
 c = r.corr()
 print(c.round(2).to_string())

@@ -1,11 +1,11 @@
-"""Daily prices shared by the blog's posts: five tickers, 2019-2023, adjusted closes
+"""Daily prices shared by the blog's posts: five tickers, 2020 to October 2025, adjusted closes
 downloaded once by fetch_prices.py and kept in data/prices.csv so the numbers never move."""
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-TICKERS = ["SPY", "AAPL", "JPM", "XOM", "GLD"]
+TICKERS = ["SPY", "NVDA", "MS", "OXY", "GLD"]
 TRADING_DAYS = 252
 
 
@@ -61,7 +61,7 @@ ANNUALISE = np.sqrt(TRADING_DAYS) * 100
 FEATURES = ["ret_1d", "ret_5d", "ret_20d", "vol_5d", "vol_20d", "sma_ratio", "bollinger"]
 
 
-def split(df, test_from="2022-01-01"):
+def split(df, test_from="2024-01-01"):
     """Train on the years before `test_from`, test on the rest. Time order, never shuffled."""
     dates = df.index.get_level_values("date")
     return df[dates < test_from], df[dates >= test_from]

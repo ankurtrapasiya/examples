@@ -24,7 +24,7 @@ ev_bet = p_win * 1 + (1 - p_win) * (-1)
 print(f"P(win) = 18/38 = {p_win:.4f}; EV of a $1 bet = {p_win:.4f}*(+1) + {1 - p_win:.4f}*(-1) = {ev_bet:.4f}")
 print(f"  1,000 bets a night -> expected result ${1000 * ev_bet:,.2f}")
 
-# --- 2. one day holding SPY, from the 2019-2023 record --------------------------------------
+# --- 2. one day holding SPY, from the 2020-2025 record --------------------------------------
 r = md.daily_returns(md.prices(["SPY"]))["SPY"]
 up = r > 0
 p_up, avg_up, avg_down = up.mean(), r[up].mean(), r[~up].mean()

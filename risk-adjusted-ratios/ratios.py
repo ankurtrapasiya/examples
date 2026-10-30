@@ -42,7 +42,7 @@ def info_ratio(r, b):
     return K * a.mean() / a.std(ddof=1)
 
 
-# --- 1. by hand: SPY's first five days of 2019 (percent, risk-free 0), AAPL as the "fund" -----
+# --- 1. by hand: SPY's first five days of 2020 (percent, risk-free 0), NVDA as the "fund" -----
 rets = md.daily_returns(md.prices())
 five = (rets.iloc[:5] * 100).round(1)
 r = five["SPY"].to_numpy()
@@ -52,14 +52,14 @@ neg = np.minimum(r, 0)
 print("downside parts", neg, "squared", np.round(neg ** 2, 2), "mean of squares", round(np.mean(neg ** 2), 3),
       "downside dev", round(downside_dev(r), 3))
 print(f"daily Sortino {r.mean() / downside_dev(r):.4f}, annualised {sortino(r):.2f}")
-fund, bench = five["AAPL"].to_numpy(), r
+fund, bench = five["NVDA"].to_numpy(), r
 act = fund - bench
-print("AAPL", fund, "SPY", bench, "active", np.round(act, 1), "mean", round(act.mean(), 2), "sd", round(act.std(ddof=1), 3))
+print("NVDA", fund, "SPY", bench, "active", np.round(act, 1), "mean", round(act.mean(), 2), "sd", round(act.std(ddof=1), 3))
 print(f"daily IR {act.mean() / act.std(ddof=1):.4f}, annualised {info_ratio(fund, bench):.2f}")
 
-# --- 1b. five years, risk-free 2% a year (roughly the average bill rate 2019-2023) ------------
+# --- 1b. five years, risk-free 2% a year (roughly the average bill rate 2020-2025) ------------
 rf_d = (1 + 0.02) ** (1 / 252) - 1
-print("\n2019-2023, risk-free 2%:")
+print("\n2020-2025, risk-free 2%:")
 for t in rets:
     x = rets[t].to_numpy()
     line = f"  {t:4s} return {x.mean() * 252:5.1%}  sd {x.std(ddof=1) * K:5.1%}  Sharpe {sharpe(x, rf_d):.2f}  Sortino {sortino(x, rf_d):.2f}"

@@ -5,7 +5,7 @@
 """Numbers and chart for the post "Portfolio optimisation".
 
 No optimiser here on purpose: we draw many random long-only portfolios and look at
-where they land. Inputs are the 2019-2023 yearly figures of five real tickers.
+where they land. Inputs are the 2020-2025 yearly figures of five real tickers.
 Run:  uv run examples/portfolio-optimisation/random_portfolios.py
 """
 import sys
@@ -22,7 +22,7 @@ import market_data as md  # noqa: E402
 OUT = cs.out_dir("portfolio-optimisation")
 
 rets = md.daily_returns(md.prices())
-names = list(rets.columns)                           # SPY, AAPL, JPM, XOM, GLD
+names = list(rets.columns)                           # SPY, NVDA, MS, OXY, GLD
 mu = (rets.mean() * 252).to_numpy()                  # yearly expected return, from the five years
 sd = (rets.std(ddof=1) * np.sqrt(252)).to_numpy()    # yearly standard deviation
 corr = rets.corr().to_numpy()
@@ -55,7 +55,7 @@ r_eq, v_eq, s_eq = stats(eq)
 print(f"equal weights: return {r_eq[0]:.2%}  sd {v_eq[0]:.2%}  Sharpe {s_eq[0]:.3f}")
 
 # sensitivity: nudge one expected return by one percentage point
-for t, delta in [("JPM", 0.02), ("AAPL", -0.05)]:
+for t, delta in [("MS", 0.02), ("NVDA", -0.05)]:
     mu2 = mu.copy()
     mu2[names.index(t)] += delta
     _, _, shp2 = stats(W, mu2)
@@ -80,6 +80,6 @@ ax.set_xlim(0, 36)
 ax.set_ylim(5, 40)
 ax.set_xlabel("Risk: standard deviation of yearly return (% a year)")
 ax.set_ylabel("Expected return (% a year)")
-cs.title(ax, "50,000 random mixes of five tickers, 2019–2023 (redder = higher Sharpe ratio)")
+cs.title(ax, "50,000 random mixes of five tickers, 2020–2025 (redder = higher Sharpe ratio)")
 ax.legend(fontsize=8, loc="lower right")
 cs.save(fig, OUT / "frontier.svg")

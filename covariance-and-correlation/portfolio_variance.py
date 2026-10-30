@@ -18,7 +18,7 @@ import market_data as md  # noqa: E402
 
 OUT = cs.out_dir("covariance-and-correlation")
 
-# --- 1. covariance and correlation by hand: SPY and GLD, first five days of 2019 ---------
+# --- 1. covariance and correlation by hand: SPY and GLD, first five days of 2020 ---------
 rets = md.daily_returns(md.prices())
 five = (rets[["SPY", "GLD"]].iloc[:5] * 100).round(1)
 a, b = five["SPY"].to_numpy(), five["GLD"].to_numpy()     # daily % returns, one decimal
@@ -36,12 +36,12 @@ print(f"sd SPY = {sa:.3f}, sd GLD = {sb:.3f}, corr = {cov:.3f}/({sa:.3f}*{sb:.3f
 print("numpy cov", np.cov(a, b)[0, 1].round(3), " numpy corrcoef", np.corrcoef(a, b)[0, 1].round(3))
 
 # --- 1b. five years: the correlation matrix and the SPY-GLD pair -------------------------
-print("\ncorrelation matrix 2019-2023:")
+print("\ncorrelation matrix 2020-2025:")
 print(rets.corr().round(2))
 ann_sd = rets.std(ddof=1) * np.sqrt(252)
 print("annual sd:", ann_sd.round(4).to_dict())
 rho_sg = rets["SPY"].corr(rets["GLD"])
-print(f"SPY-GLD correlation over five years {rho_sg:.3f}")
+print(f"SPY-GLD correlation over 2020 to 2025 {rho_sg:.3f}")
 
 # --- 2. two-asset portfolio variance: 60% SPY, 40% GLD, five-year numbers ----------------
 s1, s2, rho = round(float(ann_sd["SPY"]), 3), round(float(ann_sd["GLD"]), 3), round(float(rho_sg), 2)
@@ -52,7 +52,7 @@ print(f"terms: {w1**2 * s1**2:.6f} + {w2**2 * s2**2:.6f} + {2 * w1 * w2 * rho * 
 print(f"60/40 portfolio sd = sqrt({var_p:.6f}) = {np.sqrt(var_p):.2%}")
 print(f"weighted average of the two sds = {w1 * s1 + w2 * s2:.2%}  (what you'd get with correlation +1)")
 real = (0.6 * rets["SPY"] + 0.4 * rets["GLD"]).std(ddof=1) * np.sqrt(252)
-print(f"actual sd of a daily-rebalanced 60/40 over the five years {real:.2%}")
+print(f"actual sd of a daily-rebalanced 60/40 over 2020 to 2025 {real:.2%}")
 
 # matrix form
 w = np.array([w1, w2])

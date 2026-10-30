@@ -7,9 +7,9 @@ are reproducible without a network. Run:  uv run examples/fetch_prices.py"""
 from pathlib import Path
 import yfinance as yf
 
-TICKERS = ["SPY", "AAPL", "JPM", "XOM", "GLD"]
+TICKERS = ["SPY", "NVDA", "MS", "OXY", "GLD"]
 out = Path(__file__).resolve().parent / "data" / "prices.csv"
-px = yf.download(TICKERS, start="2019-01-01", end="2024-01-01", auto_adjust=True, progress=False)["Close"]
+px = yf.download(TICKERS, start="2020-01-01", end="2025-11-01", auto_adjust=True, progress=False)["Close"]
 px = px[TICKERS].round(4)
 px.index.name = "date"
 px.to_csv(out)
