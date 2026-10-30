@@ -64,7 +64,7 @@ knn = make_pipeline(StandardScaler(), KNeighborsRegressor(20)); lin = LinearRegr
 for name, mdl in [("KNN", knn), ("linear", lin)]:
     t0 = time.perf_counter(); mdl.fit(Xtr, ytr); tf = time.perf_counter() - t0
     t0 = time.perf_counter(); mdl.predict(Xte); tp = time.perf_counter() - t0
-    p(f"{name}: fit / predict {len(X_te):,} rows", f"{1000 * tf:.1f} ms / {1000 * tp:.1f} ms")
+    p(f"{name}: fit / predict {len(Xte):,} rows", f"{1000 * tf:.1f} ms / {1000 * tp:.1f} ms")
 
 print("\n== the curse of dimensionality ==")
 for pdim in (1, 2, 5, 10, 20, 100):
