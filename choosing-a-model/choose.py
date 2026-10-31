@@ -63,6 +63,7 @@ p("baseline, predict the training mean", f"{rmse(yte, np.full_like(yte, ytr.mean
 print("\n== extrapolation: a month twice as volatile as anything seen in training ==")
 q = Xtr[np.argmax(Xtr[:, 4])].copy()
 p("the most volatile training month: vol_20d, actual next-month volatility", f"{md.ANNUALISE * q[4]:.0f}, {ytr[np.argmax(Xtr[:, 4])]:.0f}")
+p("highest next-month volatility ever seen in training", f"{ytr.max():.0f}")
 q2 = q.copy(); q2[4] *= 2; q2[3] *= 2
 for name, m in models.items():
     p(f"{name}: prediction at double that volatility", f"{m.predict(q2[None, :])[0]:.0f}")
