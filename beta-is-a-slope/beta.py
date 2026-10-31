@@ -5,7 +5,7 @@
 """Numbers and chart for the post "Beta is a slope".
 
 Beta and alpha by regressing each ticker's daily return on SPY's, CAPM's required return, rolling
-beta, and a dollar-neutral against a beta-neutral pair. Blog data: SPY, NVDA, MS, OXY, GLD,
+beta, and a dollar-neutral against a beta-neutral pair. Blog data: SPY, NVDA, GS, XOM, GLD,
 2020-2025.  Run:  uv run examples/beta-is-a-slope/beta.py
 """
 import sys
@@ -33,7 +33,7 @@ m = r["SPY"]
 
 print("\n== beta and alpha, daily regression on SPY, 2020-2025 ==")
 rows = {}
-for t in ["NVDA", "MS", "OXY", "GLD"]:
+for t in ["NVDA", "GS", "XOM", "GLD"]:
     y = r[t]
     beta = y.cov(m) / m.var()
     alpha_d = y.mean() - beta * m.mean()
@@ -55,7 +55,7 @@ for t, d in rows.items():
     p(f"{t}: required Rf + beta(Rm - Rf) / actual / Jensen's alpha", f"{required:.1%} / {actual:.1%} / {actual - required:+.1%}")
 
 print("\n== rolling one-year beta ==")
-roll = {t: r[t].rolling(252).cov(m) / m.rolling(252).var() for t in ["NVDA", "MS", "OXY", "GLD"]}
+roll = {t: r[t].rolling(252).cov(m) / m.rolling(252).var() for t in ["NVDA", "GS", "XOM", "GLD"]}
 for t, s in roll.items():
     p(f"{t}: rolling 252-day beta, min / max", f"{s.min():.2f} / {s.max():.2f}")
 
@@ -85,7 +85,7 @@ a1.set_ylabel("NVDA daily return (%)")
 a1.legend()
 
 cs.title(a2, "Beta is not a constant: one-year rolling beta of four tickers", 2)
-for t, col in zip(["NVDA", "MS", "OXY", "GLD"], [cs.MAROON, cs.BLUE, cs.AMBER, cs.GREEN]):
+for t, col in zip(["NVDA", "GS", "XOM", "GLD"], [cs.MAROON, cs.BLUE, cs.AMBER, cs.GREEN]):
     a2.plot(roll[t].index, roll[t], color=col, label=f"{t}")
 a2.axhline(1, color=cs.GREY, lw=1, ls="--", label="beta 1: the market itself")
 a2.set_xlabel("Date (end of the one-year window)")

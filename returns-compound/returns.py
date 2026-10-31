@@ -5,7 +5,7 @@
 """Numbers and chart for the post "Returns compound".
 
 Growth factors, CAGR, arithmetic against geometric mean, volatility drag and recovery, on the
-blog's shared prices (SPY, NVDA, MS, OXY, GLD, 2020-2025).
+blog's shared prices (SPY, NVDA, GS, XOM, GLD, 2020-2025).
 Run:  uv run examples/returns-compound/returns.py
 """
 import sys

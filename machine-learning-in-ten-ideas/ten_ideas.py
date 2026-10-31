@@ -4,7 +4,7 @@
 # ///
 """Numbers and chart for the post "Machine learning for quantitative finance in ten ideas".
 
-Everything runs on the blog's shared market data (examples/market_data.py: SPY, NVDA, MS, OXY,
+Everything runs on the blog's shared market data (examples/market_data.py: SPY, NVDA, GS, XOM,
 GLD, 2020-2025, seven price-derived features, target = next month's volatility) with scikit-learn,
 plus two tiny made-up datasets that favour a line or a tree.
 Run:  uv run examples/machine-learning-in-ten-ideas/ten_ideas.py

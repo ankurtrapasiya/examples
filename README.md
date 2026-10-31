@@ -4,7 +4,7 @@ The scripts behind every number and chart on [ankurtrapasiya.com](https://ankurt
 the Machine Learning, Quantitative Finance and Engineering series. Each script is one post's
 working: run it and it prints the post's tables and redraws its charts.
 
-The data is [`data/prices.csv`](data/prices.csv): daily adjusted closes for SPY, NVDA, MS, OXY
+The data is [`data/prices.csv`](data/prices.csv): daily adjusted closes for SPY, NVDA, GS, XOM
 and GLD, 2020 to October 2025, downloaded once so the numbers never move. Code snippets in the posts read
 it straight from this repo:
 

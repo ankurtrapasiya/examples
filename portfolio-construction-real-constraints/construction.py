@@ -98,9 +98,9 @@ p("  five assets equal weight: std, average of their stds", f"{100 * np.sqrt(w5 
 # --- 4. the inputs are estimates ------------------------------------------------------------------
 print("\n4. Nudging one forecast, and shrinking all of them")
 f2 = f.copy()
-f2["MS"] = 0.02                                                # MS forecast 1% -> 2%
-p("  linear weights, MS forecast 1%", row(c * f))
-p("  linear weights, MS forecast 2%", row(c * f2))
+f2["GS"] = 0.02                                                # GS forecast 1% -> 2%
+p("  linear weights, GS forecast 1%", row(c * f))
+p("  linear weights, GS forecast 2%", row(c * f2))
 f3 = f.copy()
 f3["NVDA"], f3["SPY"] = 0.045, 0.025
 p("  risk-adjusted NVDA/SPY ratio, forecasts 5% and 2%", f"{(f['NVDA'] / sd['NVDA']**2) / (f['SPY'] / sd['SPY']**2):.2f}")

@@ -5,7 +5,7 @@
 """Numbers and charts for the post "Quantitative finance in ten ideas".
 
 A doubling-rule betting simulation on a European roulette wheel, and a Sharpe-maximising optimiser
-(SciPy SLSQP) run on the blog's shared prices (SPY, NVDA, MS, OXY, GLD, 2020-2025).
+(SciPy SLSQP) run on the blog's shared prices (SPY, NVDA, GS, XOM, GLD, 2020-2025).
 Run:  uv run examples/quant-finance-in-ten-ideas/ten_ideas.py
 """
 import sys
@@ -115,7 +115,7 @@ for a, b in windows:
 
 print("\n== diversification: four-asset mix vs its members ==")
 for yr in ["2020", "2022"]:
-    sub = r.loc[yr, ["SPY", "NVDA", "MS", "OXY"]]
+    sub = r.loc[yr, ["SPY", "NVDA", "GS", "XOM"]]
     mix = sub.mean(axis=1)
     p(f"{yr}: daily sigma of each", " ".join(f"{t}:{sub[t].std():.2%}" for t in sub))
     p(f"{yr}: equal-weight mix sigma, average pairwise correlation", f"{mix.std():.2%}, {sub.corr().values[np.triu_indices(4, 1)].mean():.2f}")

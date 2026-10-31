@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-TICKERS = ["SPY", "NVDA", "MS", "OXY", "GLD"]
+TICKERS = ["SPY", "NVDA", "GS", "XOM", "GLD"]
 TRADING_DAYS = 252
 
 

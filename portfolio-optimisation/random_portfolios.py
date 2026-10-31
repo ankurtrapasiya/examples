@@ -22,7 +22,7 @@ import market_data as md  # noqa: E402
 OUT = cs.out_dir("portfolio-optimisation")
 
 rets = md.daily_returns(md.prices())
-names = list(rets.columns)                           # SPY, NVDA, MS, OXY, GLD
+names = list(rets.columns)                           # SPY, NVDA, GS, XOM, GLD
 mu = (rets.mean() * 252).to_numpy()                  # yearly expected return, from the five years
 sd = (rets.std(ddof=1) * np.sqrt(252)).to_numpy()    # yearly standard deviation
 corr = rets.corr().to_numpy()
