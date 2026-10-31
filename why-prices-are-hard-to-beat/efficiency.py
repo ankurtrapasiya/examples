@@ -55,6 +55,10 @@ pos_follow = up.astype(float).shift(1).fillna(0)
 pos_fade = (~up).astype(float).shift(1).fillna(0)
 p("hold after an up day, no costs: total / buy and hold", f"{np.prod(1 + pos_follow * spy) - 1:+.1%} / {np.prod(1 + spy) - 1:+.1%}")
 p("hold after a down day, no costs: total", f"{np.prod(1 + pos_fade * spy) - 1:+.1%}")
+trades = pos_fade.diff().abs().fillna(0)         # 1 on each day the position changes
+p("position changes of the down-day rule", f"{int(trades.sum())}")
+for cost in (0.001, 0.005):
+    p(f"down-day rule at {cost:.1%} a change: total", f"{np.prod(1 + pos_fade * spy - trades * cost) - 1:+.1%}")
 
 print("\n== a pair: GS against XOM ==")
 ratio = np.log(px["GS"] / px["XOM"])
