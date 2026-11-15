@@ -29,7 +29,7 @@ COST = 0.001                      # 0.10% of the value traded, every time the ho
 SHARES, CASH0 = 100, 100_000.0    # the dollar example: 100 shares of SPY on a $100,000 account
 
 
-def p(label, value):
+def show(label, value):
     print(f"{label:<70} {value}")
 
 
@@ -58,11 +58,11 @@ def score(n, cost, period):
 # --- 1. orders from target positions ------------------------------------------------------------
 print("Orders under the two meanings of an action, shares of SPY")
 for cur, tgt in ((0, 100), (100, 100), (-100, 100), (100, 0)):
-    p(f"  target-position: holding {cur:+}, action says hold {tgt:+}", f"order {tgt - cur:+}")
+    show(f"  target-position: holding {cur:+}, action says hold {tgt:+}", f"order {tgt - cur:+}")
 held = 0
 for k in range(3):
     held += SHARES
-p("  incremental: action 'buy' three evenings running", f"holding {held:+}")
+show("  incremental: action 'buy' three evenings running", f"holding {held:+}")
 print()
 
 # --- 2. one day's reward in dollars ---------------------------------------------------------------
@@ -71,27 +71,27 @@ p0, p1 = px[d0], px[d1]
 cash = CASH0 - SHARES * p0 - COST * SHARES * p0
 v0, v1 = CASH0, cash + SHARES * p1
 print(f"Buy {SHARES} SPY at the close of {d0.date()}, value at the close of {d1.date()}")
-p("  prices", f"{p0:.2f} -> {p1:.2f}")
-p("  cash after buying and paying the cost", f"{cash:,.2f}")
-p("  cost paid", f"{COST * SHARES * p0:,.2f}")
-p("  value = cash + shares x price, before and after", f"{v0:,.2f} -> {v1:,.2f}")
-p("  reward = change in value", f"{v1 - v0:+,.2f}  ({100 * (v1 - v0) / v0:+.3f}%)")
-p("  same day without the cost", f"{SHARES * (p1 - p0):+,.2f}")
+show("  prices", f"{p0:.2f} -> {p1:.2f}")
+show("  cash after buying and paying the cost", f"{cash:,.2f}")
+show("  cost paid", f"{COST * SHARES * p0:,.2f}")
+show("  value = cash + shares x price, before and after", f"{v0:,.2f} -> {v1:,.2f}")
+show("  reward = change in value", f"{v1 - v0:+,.2f}  ({100 * (v1 - v0) / v0:+.3f}%)")
+show("  same day without the cost", f"{SHARES * (p1 - p0):+,.2f}")
 print()
 
 # --- 3. the training period, gross and net -------------------------------------------------------
 bh = {per: 100 * ((1 + r.loc[per[0]:per[1]]).prod() - 1) for per in (TRAIN, TEST)}
 print(f"Training period {TRAIN[0]}-{TRAIN[1]}: hold after an N-day fall, cost {100 * COST:.2f}% per trade")
-p("  buy and hold", f"{bh[TRAIN]:+.1f}%")
+show("  buy and hold", f"{bh[TRAIN]:+.1f}%")
 rows = {n: score(n, COST, TRAIN) for n in LOOKBACKS}
 print(f"  {'N':>3} {'gross %':>8} {'net %':>8} {'trades/yr':>9} {'days in %':>9}")
 for n, s in rows.items():
     print(f"  {n:>3} {s['gross']:>+8.1f} {s['net']:>+8.1f} {s['trades']:>9.1f} {s['in_mkt']:>9.1f}")
 best_gross = max(rows, key=lambda n: rows[n]["gross"])
 best_net = max(rows, key=lambda n: rows[n]["net"])
-p("  best N before costs / after costs", f"{best_gross} / {best_net}")
+show("  best N before costs / after costs", f"{best_gross} / {best_net}")
 g = rows[best_gross]
-p(f"  N={best_gross}: trades in total, and the cost per trade that wipes out the gross gain",
+show(f"  N={best_gross}: trades in total, and the cost per trade that wipes out the gross gain",
   f"{g['n_trades']}, {100 * (np.log1p(g['gross'] / 100) / g['n_trades']):.3f}%")
 print()
 
@@ -99,12 +99,12 @@ print()
 t = score(best_net, COST, TEST)
 t1 = score(best_gross, COST, TEST)
 print(f"Test period {TEST[0]}-{TEST[1]}, N frozen at {best_net} (picked on training, after costs)")
-p("  buy and hold", f"{bh[TEST]:+.1f}%")
-p(f"  N={best_net} gross / net / trades a year / days in market",
+show("  buy and hold", f"{bh[TEST]:+.1f}%")
+show(f"  N={best_net} gross / net / trades a year / days in market",
   f"{t['gross']:+.1f}% / {t['net']:+.1f}% / {t['trades']:.1f} / {t['in_mkt']:.1f}%")
-p(f"  (for comparison, N={best_gross} gross / net)", f"{t1['gross']:+.1f}% / {t1['net']:+.1f}%")
+show(f"  (for comparison, N={best_gross} gross / net)", f"{t1['gross']:+.1f}% / {t1['net']:+.1f}%")
 test_all = {n: score(n, COST, TEST)["net"] for n in LOOKBACKS}
-p("  every N after costs on the test period (not used to choose)",
+show("  every N after costs on the test period (not used to choose)",
   "  ".join(f"N={n}: {v:+.1f}" for n, v in test_all.items()))
 print()
 
@@ -115,7 +115,7 @@ gross1 = yr1.groupby(yr1.index.year).apply(lambda d: 100 * ((1 + d.h * d.r).prod
 bh_y = r.groupby(r.index.year).apply(lambda x: 100 * ((1 + x).prod() - 1))
 print("By year: correlation of today's SPY return with yesterday's; N=1 rule gross; buy and hold")
 for y in ac.index:
-    p(f"  {y}", f"{ac[y]:+.3f}   N=1 gross {gross1[y]:+6.1f}%   buy and hold {bh_y[y]:+6.1f}%")
+    show(f"  {y}", f"{ac[y]:+.3f}   N=1 gross {gross1[y]:+6.1f}%   buy and hold {bh_y[y]:+6.1f}%")
 
 # --- chart -----------------------------------------------------------------------------------------
 cs.apply()
