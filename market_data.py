@@ -28,7 +28,8 @@ def features(tickers=None, horizon=20, start=None, end=None):
       ret_1d, ret_5d, ret_20d   the last 1-, 5- and 20-day returns
       vol_5d, vol_20d           standard deviation of daily returns over the last 5 and 20 days
       sma_ratio                 price divided by its 20-day average, minus one
-      bollinger                 how many 20-day standard deviations the price is from that average
+      bollinger                 the price's distance from that average, in units of two 20-day standard
+                                deviations of price: 0 at the average, +1 or -1 at a Bollinger band
     Targets: next_vol, the standard deviation of the NEXT `horizon` daily returns (20 days, about
     a month: what the market is about to do in risk terms), and next_ret, the return over those days.
     ANNUALISE turns a daily standard deviation into the yearly percentage the posts quote.
