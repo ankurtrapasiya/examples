@@ -77,7 +77,7 @@ c_up = centred["2020-03":].diff().gt(0).idxmax()
 p("SPY low of 2020", f"{low:%Y-%m-%d}")
 p("centred average starts rising on / trailing average starts rising on", f"{c_up:%Y-%m-%d} / {t_up:%Y-%m-%d}")
 p("days the centred average 'knew' before the trailing one", f"{len(px[c_up:t_up]) - 1}")
-p("centred average on the low needs prices up to", f"{px.index[px.index.get_loc(low) + 10]:%Y-%m-%d}")
+p("centred average on the low needs prices up to", f"{px.index[px.index.get_loc(low) + 9]:%Y-%m-%d}")
 
 # ------------------------------------------------------------------ chart ----
 cs.apply()
