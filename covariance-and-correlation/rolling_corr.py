@@ -21,7 +21,7 @@ stocks = ["SPY", "NVDA", "GS", "XOM"]
 for yr in ["2020", "2021", "2022", "2023", "2024", "2025"]:
     sub = r.loc[yr, stocks]; c = sub.corr().values[np.triu_indices(4, 1)].mean()
     mix = sub.mean(axis=1)
-    print(f"{yr}: avg pairwise corr {c:.2f}; sigma of each " + " ".join(f"{t}:{sub[t].std():.2%}" for t in stocks) + f"; equal mix {mix.std():.2%}; avg of the three stocks {sub[['NVDA','GS','XOM']].std().mean():.2%}")
+    print(f"{yr}: avg pairwise corr {c:.2f}; sigma of each " + " ".join(f"{t}:{sub[t].std():.2%}" for t in stocks) + f"; equal mix {mix.std():.2%}; avg of the four holdings {sub.std().mean():.2%}")
 pairs = [("SPY", "NVDA"), ("SPY", "GLD"), ("GS", "XOM")]
 roll = {f"{a}-{b}": r[a].rolling(60).corr(r[b]) for a, b in pairs}
 for k, s in roll.items():

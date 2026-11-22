@@ -57,7 +57,7 @@ for name, m in models.items():
         t0 = time.perf_counter(); m.predict(Xte[i:i + 1]); singles.append(time.perf_counter() - t0)
     singles = np.array(singles) * 1000
     rows[name] = dict(rmse=rmse(yte, pred), fit=fit, batch=batch, p50=np.median(singles), p99=np.percentile(singles, 99))
-    p(f"{name}: test RMSE / fit / predict 2,405 rows / one row p50 / p99", f"{rows[name]['rmse']:.2f} / {1000 * fit:.0f} ms / {1000 * batch:.1f} ms / {rows[name]['p50']:.2f} ms / {rows[name]['p99']:.2f} ms")
+    p(f"{name}: test RMSE / fit / predict 2,205 rows / one row p50 / p99", f"{rows[name]['rmse']:.2f} / {1000 * fit:.0f} ms / {1000 * batch:.1f} ms / {rows[name]['p50']:.2f} ms / {rows[name]['p99']:.2f} ms")
 p("baseline, predict the training mean", f"{rmse(yte, np.full_like(yte, ytr.mean())):.2f}")
 
 print("\n== extrapolation: a month twice as volatile as anything seen in training ==")
