@@ -112,6 +112,10 @@ def _place_legends(fig):
         for c in ax.collections:
             if hasattr(c, "get_offsets") and len(c.get_offsets()):
                 pts.append(c.get_offset_transform().transform(np.asarray(c.get_offsets())))
+        for patch in ax.patches:                          # bars: test the corners of each one
+            e = patch.get_window_extent(r)
+            if e.width > 0 and e.height > 0:
+                pts.append(np.array([[e.x0, e.y0], [e.x1, e.y0], [e.x0, e.y1], [e.x1, e.y1]]))
         if pts:
             p = np.vstack(pts)
             inside = ((p[:, 0] >= box.x0) & (p[:, 0] <= box.x1) & (p[:, 1] >= box.y0) & (p[:, 1] <= box.y1)).sum()
